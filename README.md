@@ -1,8 +1,8 @@
-This repository contains my final project for the “Cloud Computing Lab” course.
+This repository contains my final project for the “Laboratorio Cloud Computing” course.
 
 ## Overview
 
-In the assignment is required to containerize a WebGL application. The project demonstrates the deployment of a Unity WebGL app with secure authentication, database persistence, and a reverse proxy, all orchestrated via Docker Compose.
+In the assignment is required to containerize a WebGL application. The project demonstrates the deployment of a Unity WebGL app with authentication portal, database persistence, and a reverse proxy, all orchestrated via Docker Compose.
 
 ## Contents
 
@@ -46,7 +46,6 @@ Key features include:
 1. **Clone the repository**
    ```bash
    git clone https://github.com/vittoriodedi/labcloudcomputing
-   cd labcloudcomputing
    ```
 
 2. **Configure environment variables**
@@ -55,26 +54,29 @@ Key features include:
 3. **Set the MySQL root password**
    Place your desired password in `secrets/db_root_password.txt`.
 
-4. **Start all services (for the first time)**
+4. **Start all services in background(for the first time)**
    ```bash
-   docker-compose up --build
+   docker-compose up -d --build
    ```
-   or 
-   **Start all services in background (from the second time)**
+   or **Start all services in background (from the second time)**
     ```bash
    docker-compose up -d
-   ```  
+   ```
 
 5. **Access the application**
    - Authentication portal: [http://localhost/auth/](http://localhost/auth/)
    - Protected WebGL App: [http://localhost/app/](http://localhost/app/)
 
-8. **Test Login**
+6. **Test Login**
   A test user is created at startup:
     - **Username:** `testuser`
     - **Password:** `testpassword`
 
 7. **Stop all services**
    ```bash
-   docker-compose down
+   docker-compose down 
    ```
+   or **Stop all services and delete volumes**
+    ```bash
+   docker-compose down -v
+   ```  

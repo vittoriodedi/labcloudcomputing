@@ -1,24 +1,26 @@
 services:
+  # WebGL Application Service, based on Apache HTTP Server
   webgl-app:
     build:
       context: ./app
       dockerfile: Dockerfile
     container_name: webgl_application
     expose:
-      - "80"
+      - "80" 
     volumes:
       - webgl_app_data:/usr/local/apache2/htdocs/
     networks:
       - app_network
-
+      
+  # MySQL Database Service
   mysql_db:
     image: mysql:8.0 
     container_name: mysql_database
     environment:
-      MYSQL_ROOT_PASSWORD_FILE: /run/secrets/db_root_password
-      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_ROOT_PASSWORD_FILE: /run/secrets/db_root_password 
+      MYSQL_DATABASE: ${MYSQL_DATABASE} 
       MYSQL_USER: ${MYSQL_USER}
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD} 
     volumes:
       - mysql_data:/var/lib/mysql
     networks:
@@ -26,16 +28,18 @@ services:
     secrets:
       - db_root_password
 
+  # Nginx Reverse Proxy Service
   reverse_proxy:
     image: nginx:stable-alpine
     container_name: main_reverse_proxy
     ports:
       - "80:80"
     volumes:
-      - ./nginx-reverse-proxy.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx-reverse-proxy.conf:/etc/nginx/nginx.conf
     networks:
       - app_network
 
+  # Authentication Portal Service, based on Node.js and Express
   auth_portal:
     build:
       context: ./auth_portal_app
@@ -46,13 +50,12 @@ services:
       MYSQL_USER: ${MYSQL_USER}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
       MYSQL_DATABASE: ${MYSQL_DATABASE}
-      NODE_ENV: development
     expose:
-      - "3000"
-    networks:
-      - app_network
+      - "3000" 
     volumes:
     - auth_portal_data:/app/data
+    networks:
+      - app_network
 
 volumes:
   webgl_app_data: 

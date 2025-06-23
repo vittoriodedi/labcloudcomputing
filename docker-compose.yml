@@ -1,0 +1,68 @@
+services:
+  webgl-app:
+    build:
+      context: ./app
+      dockerfile: Dockerfile
+    container_name: webgl_application
+    expose:
+      - "80"
+    volumes:
+      - webgl_app_data:/usr/local/apache2/htdocs/
+    networks:
+      - app_network
+
+  mysql_db:
+    image: mysql:8.0 
+    container_name: mysql_database
+    environment:
+      MYSQL_ROOT_PASSWORD_FILE: /run/secrets/db_root_password
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - app_network
+    secrets:
+      - db_root_password
+
+  reverse_proxy:
+    image: nginx:stable-alpine
+    container_name: main_reverse_proxy
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx-reverse-proxy.conf:/etc/nginx/nginx.conf:ro
+    networks:
+      - app_network
+
+  auth_portal:
+    build:
+      context: ./auth_portal_app
+      dockerfile: Dockerfile
+    container_name: authentication_portal
+    environment:
+      MYSQL_HOST: mysql_database
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      NODE_ENV: development
+    expose:
+      - "3000"
+    networks:
+      - app_network
+    volumes:
+    - auth_portal_data:/app/data
+
+volumes:
+  webgl_app_data: 
+  mysql_data: 
+  auth_portal_data: 
+
+networks:
+  app_network:
+    driver: bridge
+
+secrets:
+  db_root_password:
+    file: ./secrets/db_root_password.txt

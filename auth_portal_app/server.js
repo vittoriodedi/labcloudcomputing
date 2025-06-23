@@ -65,7 +65,7 @@ app.post('/api/login', async (req, res) => {
 
     // Check if username and password are provided
     if (!username || !password) {
-        return res.status(400).send('Username and password are required');
+        return res.status(400).send('Sono richiesti username e password.');
     }
 
     try {
@@ -76,21 +76,21 @@ app.post('/api/login', async (req, res) => {
         );
 
         if (rows.length === 0) {
-            return res.status(401).send('Not valid credentials.');
+            return res.status(401).send('Le credenziali non sono valide.');
         }
 
         const user = rows[0];
         const match = await bcrypt.compare(password, user.password);
 
         if (match) {
-            res.status(200).send('Login successful!');
+            res.status(200).send('Login Valido!');
         } else {
-            res.status(401).send('Not valid credentials.');
+            res.status(401).send('Le credenziali non sono valide.');
         }
 
     } catch (err) {
-        console.error('Login error:', err);
-        res.status(500).send('Server error.');
+        console.error('Errore di login:', err);
+        res.status(500).send('Errore Server.');
     }
 });
 

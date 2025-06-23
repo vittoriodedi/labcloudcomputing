@@ -27,21 +27,21 @@ document.addEventListener('DOMContentLoaded', () => {
             if (response.ok) {
                 // If the response is OK, displays a success message and redirects after a delay
                 loginMessage.style.color = 'green';
-                loginMessage.textContent = `Login riuscito! Reindirizzamento...`;
+                loginMessage.textContent = `Login riuscito! Attendi...`;
                 loginForm.reset(); 
                 setTimeout(() => {
                     window.location.href = '/app/';
                 }, 1000);
             } else {
-                // Eslse, displays an error message
+                // Else, displays an error message
                 loginMessage.style.color = 'red';
                 loginMessage.textContent = `Errore: ${message}`;
             }
         } catch (error) {
             // Handles network errors or server issues
-            console.error('Errore durante la richiesta di login:', error);
+            console.error('Error during login request:', error);
             loginMessage.style.color = 'red';
-            loginMessage.textContent = 'Errore di rete o server non raggiungibile.';
+            loginMessage.textContent = 'Network error or Server not available.';
         }
     });
 });

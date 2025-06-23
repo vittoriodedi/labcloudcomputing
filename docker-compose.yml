@@ -2,7 +2,7 @@ services:
   # WebGL Application Service, based on Apache HTTP Server
   webgl-app:
     build:
-      context: ./app
+      context: ./webgl_app
       dockerfile: Dockerfile
     container_name: webgl_application
     expose:
@@ -11,7 +11,7 @@ services:
       - webgl_app_data:/usr/local/apache2/htdocs/
     networks:
       - app_network
-      
+
   # MySQL Database Service
   mysql_db:
     image: mysql:8.0 
